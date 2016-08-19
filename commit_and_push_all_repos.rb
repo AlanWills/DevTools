@@ -12,6 +12,9 @@ directories = Dir.entries(".")
 directories.delete_at(0)
 directories.delete_at(0)
 
+# Cache username and password so we only have to enter them once
+system('git config --global credential.helper cache')
+
 directories.each do |filename|
     if File.directory? filename
 		Dir.chdir(filename) do
