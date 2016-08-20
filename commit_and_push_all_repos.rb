@@ -5,6 +5,7 @@
 # Delete this directory and the parent directory from the list
 commitMessage = ''
 ARGV.each do |m|
+	commitMessage += ' '
 	commitMessage += m
 end
 
@@ -16,11 +17,13 @@ directories.each do |filename|
     if File.directory? filename
 		Dir.chdir(filename) do
 		  if Dir.entries('.').include? '.git'
-			puts 'Committing and pushing ' + filename
-			system('git add .')
-			system('git commit -m"#{commitMessage}"')
-			system('git pull --rebase')
-			system('git push')
+			if system('git diff --exit-code')
+				puts 'Committing and pushing ' + filename
+				system('git add .')
+				system("git commit -m\"#{commitMessage}\"")
+				system('git pull --rebase')
+				system('git push')
+			end
 		  end
 		end
 	end
